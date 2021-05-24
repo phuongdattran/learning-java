@@ -1,7 +1,10 @@
-package com.example.demo.user;
+package com.example.demo.model;
+
+import com.example.demo.model.Post;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(
@@ -46,6 +49,9 @@ public class User {
             name = "dob"
     )
     private LocalDate dob;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Post> posts;
 
     public User() {
     }

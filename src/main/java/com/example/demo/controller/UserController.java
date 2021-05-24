@@ -1,5 +1,7 @@
-package com.example.demo.user;
+package com.example.demo.controller;
 
+import com.example.demo.model.User;
+import com.example.demo.service.UserService;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +12,7 @@ import java.util.List;
 @RequestMapping(path="users")
 public class UserController {
 
+    @Autowired
     private final UserService userService;
 
     @Autowired
@@ -20,6 +23,11 @@ public class UserController {
     @GetMapping
     public List<User> getUsers() {
         return userService.getUsers();
+    }
+
+    @GetMapping(path="{id}")
+    public User getUser(@PathVariable("id") int id) {
+        return userService.getUser(id);
     }
 
     @PostMapping

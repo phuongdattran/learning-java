@@ -1,5 +1,7 @@
-package com.example.demo.user;
+package com.example.demo.service;
 
+import com.example.demo.model.User;
+import com.example.demo.repository.UserRepository;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,10 @@ public class UserService {
 
     public List<User> getUsers() {
         return userRepository.findAll();
+    }
+
+    public User getUser(int id) {
+        return userRepository.findById(id).orElse(null);
     }
 
     public User createUser(User user) {
