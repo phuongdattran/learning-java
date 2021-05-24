@@ -4,7 +4,12 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name="test_user")
+@Table(
+        name="test_user",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "user_email_unique", columnNames = "email")
+        }
+)
 public class User {
     @Id
     @SequenceGenerator(
@@ -16,9 +21,30 @@ public class User {
             strategy = GenerationType.SEQUENCE,
             generator = "user_sequence"
     )
+    @Column(
+            name = "id",
+            updatable = false
+    )
     private int id;
+
+    @Column(
+            name = "username",
+            nullable = false,
+            columnDefinition = "TEXT"
+    )
     private String username;
+
+    @Column(
+            name = "email",
+            nullable = false,
+            columnDefinition = "TEXT"
+//            unique = true
+    )
     private String email;
+
+    @Column(
+            name = "dob"
+    )
     private LocalDate dob;
 
     public User() {
