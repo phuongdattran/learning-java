@@ -45,8 +45,8 @@ public class PostController {
         return postService.deletePost(id);
     }
 
-    @PutMapping(path="{id")
-    public Post updatePost(@PathVariable("id") int id, ObjectNode objectNode) {
+    @PutMapping(path="{id}")
+    public Post updatePost(@PathVariable("id") int id, @RequestBody ObjectNode objectNode) {
         return postService.updatePost(id, objectNode);
     }
 }
