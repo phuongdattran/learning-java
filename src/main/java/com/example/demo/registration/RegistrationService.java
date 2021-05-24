@@ -3,6 +3,7 @@ package com.example.demo.registration;
 import com.example.demo.appuser.AppUser;
 import com.example.demo.appuser.AppUserRole;
 import com.example.demo.appuser.AppUserService;
+import com.example.demo.email.EmailSender;
 import com.example.demo.registration.token.ConfirmationToken;
 import com.example.demo.registration.token.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
@@ -18,13 +19,14 @@ public class RegistrationService {
     private final AppUserService appUserService;
     private final EmailValidator emailValidator;
     private final ConfirmationTokenService confirmationTokenService;
+    private final EmailSender emailSender;
 
     public String register(RegistrationRequest request) {
         boolean isValidEmail = emailValidator.test(request.getEmail());
         if(!isValidEmail) {
             throw new IllegalStateException("email not valid");
         }
-        return appUserService.signUpUser(
+        String token = appUserService.signUpUser(
                 new AppUser(
                         request.getFirstName(),
                         request.getLastName(),
@@ -33,6 +35,9 @@ public class RegistrationService {
                         AppUserRole.USER
                 )
         );
+        String link = "http://localhost:8080/registration/confirm?token=" + token;
+        emailSender.send(request.getEmail(), buildEmail(request.getFirstName(), link));
+        return token;
     }
 
     @Transactional
@@ -55,5 +60,10 @@ public class RegistrationService {
         confirmationTokenService.setConfirmedAt(token);
         appUserService.enableAppUser(confirmationToken.getAppUser().getEmail());
         return "confirmed";
+    }
+
+    private String buildEmail(String name, String link) {
+        return  "<p> Hi " + name + "!<p/>" +
+                "<div>" + link + "</div>";
     }
 }
