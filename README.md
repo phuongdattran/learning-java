@@ -8,3 +8,4 @@ This repository contains practical cases to learn java
 |-----------------------|:---------------------:|
 | todo-list             |  todo list in with terminal |
 | spring-boot-rest-api  |  basic REST API with Spring Boot |
+| authentication        |  authentication: register, confirm with token |
