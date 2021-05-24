@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Post;
+import com.example.demo.model.PostRequest;
 import com.example.demo.model.User;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.repository.UserRepository;
@@ -37,11 +38,12 @@ public class PostService {
         return postRepository.findByUserId(userId);
     }
 
-    public Post createPost(Post post, int userId) {
+    public Post createPost(PostRequest postRequest, int userId) {
         User user = userRepository.findById(userId).orElseThrow(
                 ()-> new IllegalStateException("No such user")
         );
-        System.out.println(post.toString());
+
+        Post post = new Post(postRequest.getTitle(), postRequest.getMessage());
         post.setUser(user);
         post.setDate(LocalDate.now());
         return postRepository.save(post);
@@ -55,19 +57,20 @@ public class PostService {
         postRepository.deleteById(id);
         return "Post with id " + id + " deleted";
     }
+
     @Transactional
-    public Post updatePost(int id, ObjectNode objectNode) {
+    public Post updatePost(int id, PostRequest postRequest) {
         Post post = postRepository.findById(id).orElseThrow(
                 ()-> new IllegalStateException("No such post")
         );
-        if(objectNode.findValue("title") != null) {
-            String title = objectNode.get("title").asText();
+        String title = postRequest.getTitle();
+        if(title != null) {
             if (title.length()>0 && !Objects.equals(title, post.getTitle())) {
                 post.setTitle(title);
             }
         }
-        if(objectNode.findValue("message") != null) {
-            String message = objectNode.get("message").asText();
+        String message = postRequest.getMessage();
+        if(message != null) {
             if (message.length()>0 && !Objects.equals(message, post.getMessage())) {
                 post.setMessage(message);
             }

@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Post;
+import com.example.demo.model.PostRequest;
 import com.example.demo.service.PostService;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +36,9 @@ public class PostController {
     }
 
     @PostMapping
-    public Post createPost(@RequestBody Post post) {
+    public Post createPost(@RequestBody PostRequest postRequest) {
         int userId = 1;
-        return postService.createPost(post, userId);
+        return postService.createPost(postRequest, userId);
     }
 
     @DeleteMapping(path="{id}")
@@ -46,7 +47,7 @@ public class PostController {
     }
 
     @PutMapping(path="{id}")
-    public Post updatePost(@PathVariable("id") int id, @RequestBody ObjectNode objectNode) {
-        return postService.updatePost(id, objectNode);
+    public Post updatePost(@PathVariable("id") int id, @RequestBody PostRequest postRequest) {
+        return postService.updatePost(id, postRequest);
     }
 }

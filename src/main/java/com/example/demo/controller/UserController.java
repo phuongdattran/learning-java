@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.User;
+import com.example.demo.model.UserRequest;
 import com.example.demo.service.UserService;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +37,8 @@ public class UserController {
     }
 
     @PutMapping(path="{id}")
-    public User updateUser(@PathVariable("id") int id, @RequestBody ObjectNode objectNode) {
-        return userService.updateUser(id, objectNode);
+    public User updateUser(@PathVariable("id") int id, @RequestBody UserRequest userRequest) {
+        return userService.updateUser(id, userRequest);
     }
 
     @DeleteMapping(path="{id}")

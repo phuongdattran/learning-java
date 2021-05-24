@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.model.User;
+import com.example.demo.model.UserRequest;
 import com.example.demo.repository.UserRepository;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,21 +40,21 @@ public class UserService {
     }
 
     @Transactional
-    public User updateUser(int id, ObjectNode objectNode) {
+    public User updateUser(int id, UserRequest userRequest) {
         User userExists = userRepository.findById(id).orElseThrow(
                 () -> new IllegalStateException("No such user with id: " + id)
         );
 
-        if(objectNode.findValue("username") != null) {
-            String username = objectNode.get("username").asText();
-            if (username != null && username.length() > 0 && !Objects.equals(username, userExists.getUsername())) {
+        String username = userRequest.getUsername();
+        if(username != null) {
+            if (username.length() > 0 && !Objects.equals(username, userExists.getUsername())) {
                 userExists.setUsername(username);
             }
         }
 
-        if(objectNode.findValue("email") != null) {
-            String email = objectNode.get("email").asText();
-            if (email != null && email.length() > 0 && !Objects.equals(email, userExists.getEmail())) {
+        String email = userRequest.getUsername();
+        if(email != null) {
+            if (email.length() > 0 && !Objects.equals(email, userExists.getEmail())) {
                 Optional<User> optionalUser = userRepository.findUserByEmail(email);
                 if (optionalUser.isPresent()) {
                     throw new IllegalStateException("Email taken");
